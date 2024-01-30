@@ -1,5 +1,6 @@
 package bricker.brick_strategies;
 
+import bricker.gameobjects.Ball;
 import bricker.main.BrickerGameManager;
 import danogl.GameObject;
 
@@ -13,7 +14,8 @@ public class BasicCollisionStrategy implements CollisionStrategy{
 
     @Override
     public void onCollision(GameObject collider ,GameObject other) {
-        System.out.println("collision with brick detected");
-        brickerGameManager.RemoveBrickFromGame(collider);
+        if (other instanceof Ball){
+            brickerGameManager.RemoveBrickFromGame(collider);
+        }
     }
 }
