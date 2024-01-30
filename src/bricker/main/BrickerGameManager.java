@@ -73,8 +73,9 @@ public class BrickerGameManager extends GameManager {
         background.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
 
         Renderable brickImage = imageReader.readImage("assets/brick.png", false);
-        Brick brick = new Brick(new Vector2(0, windowDimensions.y()/2),
-                new Vector2(windowDimensions.x(), 15), brickImage, new BasicCollisionStrategy(this));
+        Brick brick = new Brick(new Vector2(0, windowDimensions.y()*0.66f),
+                new Vector2(windowDimensions.x(), 15), brickImage,
+                new BasicCollisionStrategy(this));
         gameObjects().addGameObject(brick);
     }
 
