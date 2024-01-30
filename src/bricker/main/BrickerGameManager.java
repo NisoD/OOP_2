@@ -1,21 +1,24 @@
 package bricker.main;
 
+import bricker.brick_strategies.BasicCollisionStrategy;
+import bricker.gameobjects.Brick;
 import danogl.GameManager;
 import danogl.GameObject;
 import danogl.collisions.Layer;
 import danogl.components.CoordinateSpace;
-import danogl.gui.ImageReader;
-import danogl.gui.SoundReader;
-import danogl.gui.UserInputListener;
-import danogl.gui.WindowController;
-import danogl.gui.rendering.RectangleRenderable;
+import danogl.gui.*;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
-import gameobjects.Ball;
+import bricker.gameobjects.AIPaddle;
+import bricker.gameobjects.Ball;
+import bricker.gameobjects.UserPaddle;
 
-import java.awt.*;
+import java.util.Random;
 
-public class BrickerGameManager extends GameManager{
+public class BrickerGameManager extends GameManager {
+    private static final float BALL_SPEED = 200;
+    private Ball ball;
+
     /**
      * constructor for BrickerGameManager, makes a window in game manager
      * @param windowTitle the title of the window
@@ -44,19 +47,20 @@ public class BrickerGameManager extends GameManager{
         Vector2 windowDimensions = windowController.getWindowDimensions();
 
         // create ball
-        Ball ball = MakeBall(windowDimensions, imageReader);
-        gameObjects().addGameObject(ball);
+        MakeBall(windowDimensions, imageReader, soundReader);
 
-        // create paddles
-        int[] paddleHeights = {(int) windowDimensions.y() - 30, 30};
+        // create user paddle
         Renderable paddleImage =
                 imageReader.readImage("assets/paddle.png", false);
+        UserPaddle userPaddle = new UserPaddle(Vector2.ZERO, new Vector2(200, 20), paddleImage,
+                inputListener);
+        userPaddle.setCenter(new Vector2(windowDimensions.x()/2, (int) windowDimensions.y() - 30));
+        gameObjects().addGameObject(userPaddle);
 
-        for (int i = 0; i < paddleHeights.length; i++) {
-            GameObject paddle = new GameObject(Vector2.ZERO, new Vector2(200, 20), paddleImage);
-            paddle.setCenter(new Vector2(windowDimensions.x()/2, paddleHeights[i]));
-            gameObjects().addGameObject(paddle);
-        }
+        // create AI paddle
+        AIPaddle aiPaddle = new AIPaddle(Vector2.ZERO, new Vector2(200, 20), paddleImage, ball);
+        aiPaddle.setCenter(new Vector2(windowDimensions.x()/2, 30));
+        gameObjects().addGameObject(aiPaddle);
 
         // create walls
         GameObject[] walls = MakeWalls(windowDimensions);
@@ -67,21 +71,41 @@ public class BrickerGameManager extends GameManager{
         GameObject background = MakeBackground(windowDimensions, imageReader); // make the background
         gameObjects().addGameObject(background, Layer.BACKGROUND);
         background.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
+
+        Renderable brickImage = imageReader.readImage("assets/brick.png", false);
+        Brick brick = new Brick(new Vector2(0, windowDimensions.y()/2),
+                new Vector2(windowDimensions.x(), 15), brickImage, new BasicCollisionStrategy(this));
+        gameObjects().addGameObject(brick);
+    }
+
+    /**
+     * removes the brick that the ball hit from the game
+     * @param collider the brick that the ball hit
+     */
+    public void RemoveBrickFromGame(GameObject collider){
+        gameObjects().removeGameObject(collider);
     }
 
     /**
      * makes the ball
      * @param windowDimensions the dimensions of the window
      * @param imageReader the image reader
-     * @return the ball of the game
      */
-    private Ball MakeBall(Vector2 windowDimensions, ImageReader imageReader){
+    private void MakeBall(Vector2 windowDimensions, ImageReader imageReader, SoundReader soundReader){
         Renderable ballImage = imageReader.readImage("assets/ball.png", true);
-        Ball ball = new Ball(Vector2.ZERO, new Vector2(50, 50), ballImage);
-        ball.setVelocity(new Vector2(0, 200));
+        Sound collisionSound = soundReader.readSound("assets/blop_cut_silenced.wav");
+        ball = new Ball(Vector2.ZERO, new Vector2(40, 40), ballImage, collisionSound);
+        float ballVelX = BALL_SPEED;
+        float ballVelY = BALL_SPEED;
+        Random rand = new Random();
+        ball.setVelocity(new Vector2(ballVelX, ballVelY));
 
+        if(rand.nextBoolean()){ballVelX*=-1;}
+        if(rand.nextBoolean()){ballVelY*=-1;}
+
+        ball.setVelocity(new Vector2(ballVelX,ballVelY));
         ball.setCenter(windowDimensions.mult(0.5f));
-        return ball;
+        gameObjects().addGameObject(ball);
     }
 
     /**
