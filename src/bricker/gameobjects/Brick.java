@@ -25,6 +25,13 @@ public class Brick extends GameObject {
         this.strategy = strategy;
     }
 
+    /**
+     * what happens when the brick is colliding with something else
+     * @param other The GameObject with which a collision occurred.
+     * @param collision Information regarding this collision.
+     *                  A reasonable elastic behavior can be achieved with:
+     *                  setVelocity(getVelocity().flipped(collision.getNormal()));
+     */
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
