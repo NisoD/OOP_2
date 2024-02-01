@@ -6,6 +6,9 @@ import danogl.gui.Sound;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
+/**
+ * the ball class, responsible on the behavior of the ball
+ */
 public class Ball extends GameObject {
     private Sound collisionSound;
 

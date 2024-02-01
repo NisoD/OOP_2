@@ -17,6 +17,10 @@ import java.awt.event.KeyEvent;
 import java.util.Objects;
 import java.util.Random;
 
+/**
+ * the game manager - it's responsible for the GameManager,
+ * the game window, the graphics are the scores
+ */
 public class BrickerGameManager extends GameManager {
     private static final float BALL_SPEED = 200;
     private static final int WALLS_WIDTH = 10;

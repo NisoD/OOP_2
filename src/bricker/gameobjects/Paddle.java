@@ -7,6 +7,9 @@ import danogl.util.Vector2;
 
 import java.awt.event.KeyEvent;
 
+/**
+ * the paddle class, responsible on the behavior of the paddle
+ */
 public class Paddle extends GameObject {
     private static final float MOVEMENT_SPEED = 300;
     private final UserInputListener inputListener;

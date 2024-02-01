@@ -6,6 +6,9 @@ import danogl.collisions.Collision;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
+/**
+ * the brick class, responsible on the behavior of the brick
+ */
 public class Brick extends GameObject {
 
     private CollisionStrategy strategy;

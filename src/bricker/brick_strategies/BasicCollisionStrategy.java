@@ -4,6 +4,9 @@ import bricker.gameobjects.Ball;
 import bricker.main.BrickerGameManager;
 import danogl.GameObject;
 
+/**
+ * the BasicCollisionStrategy class, responsible on the behavior of the basic collision
+ */
 public class BasicCollisionStrategy implements CollisionStrategy{
     private BrickerGameManager brickerGameManager;
 
