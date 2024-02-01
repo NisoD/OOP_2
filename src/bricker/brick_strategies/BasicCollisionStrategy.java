@@ -10,11 +10,20 @@ import danogl.GameObject;
 public class BasicCollisionStrategy implements CollisionStrategy{
     private BrickerGameManager brickerGameManager;
 
+    /**
+     * the constructor of the BasicCollisionStrategy
+     * @param brickerGameManager the game manager
+     */
     public BasicCollisionStrategy(BrickerGameManager brickerGameManager) {
 
         this.brickerGameManager = brickerGameManager;
     }
 
+    /**
+     * the implementation of on collision: only makes the brick disappear
+     * @param collider the brick that the other object collided with
+     * @param other the other object that collided with the brick
+     */
     @Override
     public void onCollision(GameObject collider ,GameObject other) {
         if (other instanceof Ball){

@@ -35,6 +35,15 @@ public class Paddle extends GameObject {
         this.WIDTH = dimensions.x();
     }
 
+    /**
+     * updates the paddle - check if the player moved the ball, changes the position accordingly
+     * @param deltaTime The time elapsed, in seconds, since the last frame. Can
+     *                  be used to determine a new position/velocity by multiplying
+     *                  this delta with the velocity/acceleration respectively
+     *                  and adding to the position/velocity:
+     *                  velocity += deltaTime*acceleration
+     *                  pos += deltaTime*velocity
+     */
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);

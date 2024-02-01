@@ -26,6 +26,13 @@ public class Ball extends GameObject {
         this.collisionSound = collisionSound;
     }
 
+    /**
+     * responsible for what happens on collision - makes the ball bounce
+     * @param other The GameObject with which a collision occurred.
+     * @param collision Information regarding this collision.
+     *                  A reasonable elastic behavior can be achieved with:
+     *                  setVelocity(getVelocity().flipped(collision.getNormal()));
+     */
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
