@@ -4,6 +4,7 @@ import danogl.GameObject;
 import danogl.collisions.Collision;
 import danogl.gui.Sound;
 import danogl.gui.rendering.Renderable;
+import danogl.util.Counter;
 import danogl.util.Vector2;
 
 /**
@@ -11,6 +12,13 @@ import danogl.util.Vector2;
  */
 public class Ball extends GameObject {
     private Sound collisionSound;
+
+    public int getCollisionCounter() {
+        return collisionCounter.value();
+    }
+
+    private Counter collisionCounter;
+
 
     /**
      * Construct a new GameObject instance.
@@ -24,8 +32,8 @@ public class Ball extends GameObject {
     public Ball(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable, Sound collisionSound) {
         super(topLeftCorner, dimensions, renderable);
         this.collisionSound = collisionSound;
+        this.collisionCounter = new Counter(0);
     }
-
     /**
      * responsible for what happens on collision - makes the ball bounce
      * @param other The GameObject with which a collision occurred.
@@ -38,6 +46,7 @@ public class Ball extends GameObject {
         super.onCollisionEnter(other, collision);
         Vector2 newVel = getVelocity().flipped(collision.getNormal());
         setVelocity(newVel);
+        collisionCounter.increment();
         collisionSound.play();
     }
 }

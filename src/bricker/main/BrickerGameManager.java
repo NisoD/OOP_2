@@ -1,12 +1,16 @@
 package bricker.main;
 
+import bricker.brick_strategies.AnotherPaddleStrategy;
 import bricker.brick_strategies.BasicCollisionStrategy;
+import bricker.brick_strategies.CameraStrategy;
+import bricker.brick_strategies.PuckCollisionStrategy;
 import bricker.gameobjects.*;
 import danogl.GameManager;
 import danogl.GameObject;
 import danogl.collisions.Layer;
 import danogl.components.CoordinateSpace;
 import danogl.gui.*;
+import danogl.gui.rendering.Camera;
 import danogl.gui.rendering.Renderable;
 import danogl.gui.rendering.TextRenderable;
 import danogl.util.Counter;
@@ -14,7 +18,6 @@ import danogl.util.Vector2;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -34,6 +37,8 @@ public class BrickerGameManager extends GameManager {
     private static final int PADDLE_WIDTH = 200;
     private static final int PADDLE_HEIGHT = 20;
     private static final float BALL_SIZE = 40;
+    private static final int TIME_OF_BALL_COLLISION_CAMERA_MOVE = 4;
+    private boolean isThereASecondPaddle = false;
     private Ball ball;
     private int rowBrickNumber, colBrickNumber;
     private Vector2 windowDimensions, nextHeartPosition;
@@ -41,8 +46,10 @@ public class BrickerGameManager extends GameManager {
     private Counter lifeCounter, brickCounter;
     private TextRenderable lifeText;
     private GameObject[] hearts;
-    UserInputListener inputListener;
-
+    private UserInputListener inputListener;
+    private ImageReader imageReader;
+    private SoundReader soundReader;
+    private int timesOfBallCollision;
 
     /**
      * default constructor for Bricker Game Manager, makes a window in game manager
@@ -78,6 +85,46 @@ public class BrickerGameManager extends GameManager {
     }
 
     /**
+     * adds a second paddle, only if there is no second paddle already
+     */
+    public void AddSecondPaddle() {
+        if (!isThereASecondPaddle){
+            isThereASecondPaddle = true;
+            Renderable paddleImage =
+                    imageReader.readImage("assets/paddle.png", false);
+            SecondPaddle secondPaddle = new SecondPaddle(Vector2.ZERO,
+                    new Vector2(PADDLE_WIDTH, PADDLE_HEIGHT), paddleImage, inputListener, windowDimensions,
+                    this);
+            secondPaddle.setCenter(new Vector2(windowDimensions.x()/2, windowDimensions.y()/2));
+            gameObjects().addGameObject(secondPaddle);
+        }
+    }
+
+    /**
+     * removes any item from the game
+     * @param object the object to remove
+     * @param layer the layer to remove the object from
+     */
+    public void RemoveItemFromGame(GameObject object, int layer){
+        gameObjects().removeGameObject(object, layer);
+
+        if (object instanceof SecondPaddle){
+            isThereASecondPaddle = false;
+        }
+    }
+
+    /**
+     *
+     * @param camera
+     */
+    @Override
+    public void setCamera(Camera camera) {
+        super.setCamera(camera);
+        if (ball != null)
+            this.timesOfBallCollision = ball.getCollisionCounter();
+    }
+
+    /**
      *
      * @param imageReader Contains a single method: readImage, which reads an image from disk.
      *                 See its documentation for help.
@@ -98,23 +145,20 @@ public class BrickerGameManager extends GameManager {
         this.lifeCounter = new Counter(START_LIFE);
         this.hearts = new GameObject[lifeCounter.value()];
         this.inputListener = inputListener;
+        this.imageReader = imageReader;
+        this.soundReader = soundReader;
 
-        // create ball
-        MakeBall(imageReader, soundReader);
+        MakeBall(); // create ball
+        MakePaddles(); // make paddles
+        MakeWalls(); // create walls
 
-        // make paddles
-        MakePaddles(imageReader, inputListener);
-
-        // create walls
-        MakeWalls();
-
-        GameObject background = MakeBackground(imageReader); // make the background
+        GameObject background = MakeBackground(); // make the background
         gameObjects().addGameObject(background, Layer.BACKGROUND);
         background.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
 
-        MakeBricks(imageReader); //make the bricks
-        MakeLifeCount();
-        MakeHeartLife(imageReader);
+        MakeBricks(); //make the bricks
+        MakeLifeCount(); // make the life counter
+        MakeHeartLife(); // make the life graphics
     }
 
     /**
@@ -130,6 +174,11 @@ public class BrickerGameManager extends GameManager {
     public void update(float deltaTime) {
         super.update(deltaTime);
         float ballHeight = ball.getCenter().y();
+
+        if (camera() != null && ball.getCollisionCounter() == timesOfBallCollision +
+                TIME_OF_BALL_COLLISION_CAMERA_MOVE){
+            setCamera(null);
+        }
 
         String prompt = "";
         if (brickCounter.value() == 0 || inputListener.isKeyPressed(KeyEvent.VK_W)){
@@ -157,11 +206,24 @@ public class BrickerGameManager extends GameManager {
     }
 
     /**
-     * make the paddle of the player
-     * @param imageReader the image reader to read images
-     * @param inputListener the input listener
+     * makes two puck balls, adds them to the board
      */
-    private void MakePaddles(ImageReader imageReader, UserInputListener inputListener){
+    public void MakeTwoPucks(Vector2 brickPosition) {
+        Renderable puckImage = imageReader.readImage("assets/mockBall.png", true);
+        Sound collisionSound = soundReader.readSound("assets/blop_cut_silenced.wav");
+
+        for (int i = 0; i < 2; i++) {
+            Puck puckBall = new Puck(Vector2.ZERO,
+                    new Vector2(0.75f * BALL_SIZE, 0.75f * BALL_SIZE), puckImage, collisionSound,
+                    brickPosition,this, windowDimensions);
+            gameObjects().addGameObject(puckBall);
+        }
+    }
+
+    /**
+     * make the paddle of the player
+     */
+    private void MakePaddles(){
         // create user paddle
         Renderable paddleImage =
                 imageReader.readImage("assets/paddle.png", false);
@@ -175,7 +237,7 @@ public class BrickerGameManager extends GameManager {
     /**
      * makes the graphics life representation
      */
-    private void MakeHeartLife(ImageReader imageReader){
+    private void MakeHeartLife(){
         Renderable heartImage = imageReader.readImage("assets/heart.png", true);
         for (int i = 0; i < lifeCounter.value(); i++) {
             GameObject heart = new GameObject(nextHeartPosition, new Vector2(LIFE_COUNT_SIZE,
@@ -261,9 +323,8 @@ public class BrickerGameManager extends GameManager {
 
     /**
      * makes the bricks of the game, adds them to the board
-     * @param imageReader the image reader
      */
-    private void MakeBricks(ImageReader imageReader){
+    private void MakeBricks(){
         Renderable brickImage = imageReader.readImage("assets/brick.png", false);
         int brickWidth =
                 (int) (windowDimensions.x() - (2*2*WALLS_WIDTH) - (BRICK_SPACES * colBrickNumber)) /
@@ -276,7 +337,7 @@ public class BrickerGameManager extends GameManager {
                     new Vector2(2*WALLS_WIDTH + BRICK_SPACES + ((brickWidth + BRICK_SPACES)* i),
                                 2*WALLS_WIDTH + BRICK_SPACES + ((BRICK_HEIGHT + BRICK_SPACES)* j)),
                     new Vector2(brickWidth, BRICK_HEIGHT), brickImage,
-                    new BasicCollisionStrategy(this));
+                    new CameraStrategy(this, windowController));
                 gameObjects().addGameObject(brick);
             }
         }
@@ -284,9 +345,8 @@ public class BrickerGameManager extends GameManager {
 
     /**
      * makes the ball
-     * @param imageReader the image reader
      */
-    private void MakeBall(ImageReader imageReader, SoundReader soundReader){
+    private void MakeBall(){
         Renderable ballImage = imageReader.readImage("assets/ball.png", true);
         Sound collisionSound = soundReader.readSound("assets/blop_cut_silenced.wav");
         ball = new Ball(Vector2.ZERO, new Vector2(BALL_SIZE, BALL_SIZE), ballImage, collisionSound);
@@ -305,10 +365,10 @@ public class BrickerGameManager extends GameManager {
 
     /**
      * make the background of the game
-     * @param imageReader the image reader
+     *
      * @return the background
      */
-    private GameObject MakeBackground(ImageReader imageReader){
+    private GameObject MakeBackground(){
         Renderable backImage = imageReader.readImage("assets/DARK_BG2_small.jpeg",
                 false);
         GameObject background = new GameObject(Vector2.ZERO, new Vector2(windowDimensions.x(),
