@@ -387,7 +387,7 @@ public class BrickerGameManager extends GameManager {
                     new Vector2(2*WALLS_WIDTH + BRICK_SPACES + ((brickWidth + BRICK_SPACES)* i),
                                 2*WALLS_WIDTH + BRICK_SPACES + ((BRICK_HEIGHT + BRICK_SPACES)* j)),
                     new Vector2(brickWidth, BRICK_HEIGHT), brickImage,
-                    new IncrementLifeStrategy(imageReader,this));
+                    new IncrementLifeStrategy(this));
                 gameObjects().addGameObject(brick);
             }
         }
