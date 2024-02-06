@@ -27,10 +27,10 @@ public class CollisionStrategyFactory {
             case 3:
                 collisionStrategy = new CameraStrategy(brickerGameManager);
                 break;
-//            case 4:
-//                CollisionStrategy[] strategies = DoubleStrategyHandler();
-//                collisionStrategy = new DoubleBehaviourStrategy(brickerGameManager, strategies);
-//                break;
+            case 4:
+                CollisionStrategy[] strategies = DoubleStrategyHandler();
+                collisionStrategy = new DoubleBehaviourStrategy(brickerGameManager, strategies);
+                break;
             default:
                 collisionStrategy = new BasicCollisionStrategy(brickerGameManager);
                 break;
@@ -56,11 +56,12 @@ public class CollisionStrategyFactory {
         Arrays.fill(lst, -1);
         int numbersInList = 2;
         int index = 2;
-        lst[0] = 4;
-        lst[1] = 4;
+        lst[0] = random.nextInt(5);
+        lst[1] = random.nextInt(5);
 
         int doubleIndex = isThereADoubleIndex(lst);
-        while (doubleIndex >= 0 && index <= MAX_STRATEGIES) {
+        int iterations = 0; // To limit maximum iterations
+        while (doubleIndex >= 0 && index <= MAX_STRATEGIES && iterations < MAX_STRATEGIES) {
             if (numbersInList < MAX_STRATEGIES) {
                 numbersInList++;
             }
@@ -70,6 +71,7 @@ public class CollisionStrategyFactory {
             }
             lst[index] = random.nextInt(5);
             index++;
+            iterations++;
 
             doubleIndex = isThereADoubleIndex(lst);
         }
