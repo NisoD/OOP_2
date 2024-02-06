@@ -32,7 +32,7 @@ public class Heart extends GameObject {
      */
     @Override
     public boolean shouldCollideWith(GameObject other) {
-        return !(other.getTag().equals("Ball"));
+        return !(other.getTag().equals("Ball") || other.getTag().equals("Puck"));
     }
 
     /**

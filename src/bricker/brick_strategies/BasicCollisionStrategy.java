@@ -1,6 +1,5 @@
 package bricker.brick_strategies;
 
-import bricker.gameobjects.Ball;
 import bricker.main.BrickerGameManager;
 import danogl.GameObject;
 
