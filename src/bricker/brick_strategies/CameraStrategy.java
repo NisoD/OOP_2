@@ -17,15 +17,15 @@ public class CameraStrategy implements CollisionStrategy{
      * the constructor of the CameraStrategy
      * @param brickerGameManager the game manager
      */
-    public CameraStrategy(BrickerGameManager brickerGameManager, WindowController windowController) {
+    public CameraStrategy(BrickerGameManager brickerGameManager) {
         this.brickerGameManager = brickerGameManager;
-        this.windowController = windowController;
+        this.windowController = brickerGameManager.getWindowController();
     }
     @Override
     public void onCollision(GameObject collider, GameObject other) {
-        if (other instanceof Ball){
+        if (other.getTag().equals("Ball")){
             brickerGameManager.RemoveBrickFromGame(collider);
-            if (!(other instanceof Puck) && (brickerGameManager.camera() == null)){
+            if (!(other.getTag().equals("Puck")) && (brickerGameManager.camera() == null)){
                 timesOfBallCollision = ((Ball) other).getCollisionCounter();
                 brickerGameManager.setCamera(new Camera(other, Vector2.ZERO,
                         windowController.getWindowDimensions().mult(1.2f),

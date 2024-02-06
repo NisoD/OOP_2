@@ -2,13 +2,21 @@ package bricker.brick_strategies;
 
 import bricker.gameobjects.Ball;
 import bricker.gameobjects.Paddle;
+import bricker.gameobjects.Puck;
 import bricker.main.BrickerGameManager;
 import danogl.GameObject;
 import danogl.collisions.Layer;
+import danogl.gui.ImageReader;
+import danogl.gui.Sound;
+import danogl.gui.SoundReader;
+import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
 public class PuckCollisionStrategy implements CollisionStrategy{
     private BrickerGameManager brickerGameManager;
+    private final ImageReader imageReader;
+    private final SoundReader soundReader;
+    private final Vector2 windowDimensions;
 
     /**
      * the constructor of the BasicCollisionStrategy
@@ -16,6 +24,9 @@ public class PuckCollisionStrategy implements CollisionStrategy{
      */
     public PuckCollisionStrategy(BrickerGameManager brickerGameManager) {
         this.brickerGameManager = brickerGameManager;
+        this.imageReader = brickerGameManager.getImageReader();
+        this.soundReader = brickerGameManager.getSoundReader();
+        this.windowDimensions = brickerGameManager.getWindowDimensions();
     }
 
     /**
@@ -25,8 +36,18 @@ public class PuckCollisionStrategy implements CollisionStrategy{
      */
     @Override
     public void onCollision(GameObject collider, GameObject other) {
-        if (other instanceof Ball){
-            brickerGameManager.MakeTwoPucks(collider.getCenter());
+        if (other.getTag().equals("Ball")){
+            Vector2 brickPosition = collider.getCenter();
+            float ballSize = brickerGameManager.getBallSize();
+            Sound collisionSound = soundReader.readSound("assets/blop_cut_silenced.wav");
+            Renderable puckImage = imageReader.readImage("assets/mockBall.png",
+                    true);
+            for (int i = 0; i < 2; i++) {
+                Puck puckBall = new Puck(Vector2.ZERO,
+                        new Vector2(0.75f * ballSize, 0.75f * ballSize), puckImage, collisionSound,
+                        brickPosition,brickerGameManager, windowDimensions);
+                brickerGameManager.AddGameObjectToGame(puckBall);
+            }
             brickerGameManager.RemoveBrickFromGame(collider);
         }
     }

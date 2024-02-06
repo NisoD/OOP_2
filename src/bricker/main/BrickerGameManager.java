@@ -1,9 +1,7 @@
 package bricker.main;
 
-import bricker.brick_strategies.AnotherPaddleStrategy;
-import bricker.brick_strategies.BasicCollisionStrategy;
 import bricker.brick_strategies.CameraStrategy;
-import bricker.brick_strategies.PuckCollisionStrategy;
+import bricker.brick_strategies.IncrementLifeStrategy;
 import bricker.gameobjects.*;
 import danogl.GameManager;
 import danogl.GameObject;
@@ -36,8 +34,9 @@ public class BrickerGameManager extends GameManager {
     private static final int SPACE_TO_REMOVE = 30;
     private static final int PADDLE_WIDTH = 200;
     private static final int PADDLE_HEIGHT = 20;
-    private static final float BALL_SIZE = 40;
+    private static final float BALL_SIZE = 20;
     private static final int TIME_OF_BALL_COLLISION_CAMERA_MOVE = 4;
+    private static final int MAX_LIFE_AMOUNT = 4;
     private boolean isThereASecondPaddle = false;
     private Ball ball;
     private int rowBrickNumber, colBrickNumber;
@@ -76,28 +75,51 @@ public class BrickerGameManager extends GameManager {
     }
 
     /**
+     * getter for the isThereASecondPaddle
+     * @return Second paddle exist?
+     */
+    public boolean getIsThereSecondPaddle(){return isThereASecondPaddle;}
+
+    /**
+     * setter for the isThereASecondPaddle
+     * @param isThereASecondPaddle the value to set
+     */
+    public void setIsThereSecondPaddle(boolean isThereASecondPaddle){
+        this.isThereASecondPaddle = isThereASecondPaddle;
+    }
+
+    /**
+     * getter for the imageReader
+     * @return the imageReader
+     */
+    public ImageReader getImageReader(){return imageReader;}
+
+    /**
+     * getter for soundReader
+     * @return soundReader
+     */
+    public SoundReader getSoundReader(){return soundReader;}
+
+    /**
+     * getter for the window controller
+     * @return windowController
+     */
+    public WindowController getWindowController(){return windowController;}
+
+    /**
+     * @return heart image size
+     */
+    public  int getLifeCountSize() {
+        return LIFE_COUNT_SIZE;
+    }
+
+    /**
      * removes the brick that the ball hit from the game
      * @param collider the brick that the ball hit
      */
     public void RemoveBrickFromGame(GameObject collider){
         brickCounter.decrement();
         gameObjects().removeGameObject(collider, Layer.DEFAULT);
-    }
-
-    /**
-     * adds a second paddle, only if there is no second paddle already
-     */
-    public void AddSecondPaddle() {
-        if (!isThereASecondPaddle){
-            isThereASecondPaddle = true;
-            Renderable paddleImage =
-                    imageReader.readImage("assets/paddle.png", false);
-            SecondPaddle secondPaddle = new SecondPaddle(Vector2.ZERO,
-                    new Vector2(PADDLE_WIDTH, PADDLE_HEIGHT), paddleImage, inputListener, windowDimensions,
-                    this);
-            secondPaddle.setCenter(new Vector2(windowDimensions.x()/2, windowDimensions.y()/2));
-            gameObjects().addGameObject(secondPaddle);
-        }
     }
 
     /**
@@ -108,14 +130,53 @@ public class BrickerGameManager extends GameManager {
     public void RemoveItemFromGame(GameObject object, int layer){
         gameObjects().removeGameObject(object, layer);
 
-        if (object instanceof SecondPaddle){
+        if (object.getTag().equals("SecondPaddle")){
             isThereASecondPaddle = false;
         }
     }
 
     /**
-     *
-     * @param camera
+     * increments the brick counter by 1
+     */
+    public void IncrementBrickCounter(){
+        brickCounter.increment();
+    }
+
+    /**
+     * decrements the brick counter by 1
+     */
+    public void DecrementBrickCounter(){
+        brickCounter.decrement();
+    }
+
+    /**
+     * getter for ballSize
+     * @return returns the ball size in game
+     */
+    public float getBallSize(){return BALL_SIZE;}
+
+    /**
+     * getter for windowDimensions
+     * @return window dimension for other game components
+     */
+    public Vector2 getWindowDimensions(){return windowDimensions;}
+
+    /**
+     * getter for the size of the paddle
+     * @return  paddle sizes for another game components to use
+     */
+
+    public Vector2 getPaddleSize(){return new Vector2(PADDLE_WIDTH,PADDLE_HEIGHT);}
+
+    /**
+     * getter for the inputListener
+     * @return inputListener for another game components to use
+     */
+    public UserInputListener getInputListener(){return inputListener;}
+
+    /**
+     * sets the camera to the given camera
+     * @param camera the given camera
      */
     @Override
     public void setCamera(Camera camera) {
@@ -143,13 +204,13 @@ public class BrickerGameManager extends GameManager {
         windowDimensions = windowController.getWindowDimensions();
         this.windowController = windowController;
         this.lifeCounter = new Counter(START_LIFE);
-        this.hearts = new GameObject[lifeCounter.value()];
+        this.hearts = new GameObject[MAX_LIFE_AMOUNT];
         this.inputListener = inputListener;
         this.imageReader = imageReader;
         this.soundReader = soundReader;
 
         MakeBall(); // create ball
-        MakePaddles(); // make paddles
+        MakePaddle(); // make paddles
         MakeWalls(); // create walls
 
         GameObject background = MakeBackground(); // make the background
@@ -206,24 +267,17 @@ public class BrickerGameManager extends GameManager {
     }
 
     /**
-     * makes two puck balls, adds them to the board
+     * adds a given gameObject to the game
+     * @param object object to add to the game
      */
-    public void MakeTwoPucks(Vector2 brickPosition) {
-        Renderable puckImage = imageReader.readImage("assets/mockBall.png", true);
-        Sound collisionSound = soundReader.readSound("assets/blop_cut_silenced.wav");
-
-        for (int i = 0; i < 2; i++) {
-            Puck puckBall = new Puck(Vector2.ZERO,
-                    new Vector2(0.75f * BALL_SIZE, 0.75f * BALL_SIZE), puckImage, collisionSound,
-                    brickPosition,this, windowDimensions);
-            gameObjects().addGameObject(puckBall);
-        }
+    public void AddGameObjectToGame(GameObject object){
+        gameObjects().addGameObject(object);
     }
 
     /**
      * make the paddle of the player
      */
-    private void MakePaddles(){
+    private void MakePaddle(){
         // create user paddle
         Renderable paddleImage =
                 imageReader.readImage("assets/paddle.png", false);
@@ -264,15 +318,11 @@ public class BrickerGameManager extends GameManager {
      * increments the hearts graphics,
      * counts on the fact that the lifeCounter has already been incremented
      */
-    private void IncrementHeartsLife(ImageReader imageReader){
+    public void IncrementHeartsLife(){
+        if(lifeCounter.value()>=MAX_LIFE_AMOUNT) return; // checks for exceeded life
         Renderable heartImage = imageReader.readImage("assets/heart.png", true);
-        if (hearts[lifeCounter.value()] == null){
-            GameObject[] newHearts = new GameObject[lifeCounter.value()];
-            for (int i = 0; i < lifeCounter.value() - 1; i++) {
-                newHearts[i] = hearts[i];
-            }
-            hearts = newHearts;
-        }
+        lifeCounter.increment();
+        UpdateLifeCounterGraphic();
         for (int i = 0; i < lifeCounter.value(); i++) {
             if (hearts[i] == null){
                 GameObject newHeart = new GameObject(nextHeartPosition, new Vector2(LIFE_COUNT_SIZE,
@@ -337,7 +387,7 @@ public class BrickerGameManager extends GameManager {
                     new Vector2(2*WALLS_WIDTH + BRICK_SPACES + ((brickWidth + BRICK_SPACES)* i),
                                 2*WALLS_WIDTH + BRICK_SPACES + ((BRICK_HEIGHT + BRICK_SPACES)* j)),
                     new Vector2(brickWidth, BRICK_HEIGHT), brickImage,
-                    new CameraStrategy(this, windowController));
+                    new IncrementLifeStrategy(imageReader,this));
                 gameObjects().addGameObject(brick);
             }
         }

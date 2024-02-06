@@ -33,6 +33,7 @@ public class Ball extends GameObject {
         super(topLeftCorner, dimensions, renderable);
         this.collisionSound = collisionSound;
         this.collisionCounter = new Counter(0);
+        this.setTag("Ball");
     }
     /**
      * responsible for what happens on collision - makes the ball bounce

@@ -29,6 +29,7 @@ public class SecondPaddle extends Paddle{
         super(topLeftCorner, dimensions, renderable, inputListener, windowDimensions);
         ballCoillisionNumber = new Counter(0);
         this.brickerGameManager = brickerGameManager;
+        this.setTag("SecondPaddle");
     }
 
     public int getBallCoillisionNumber() {
@@ -38,7 +39,7 @@ public class SecondPaddle extends Paddle{
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
-        if (other instanceof Ball){
+        if (other.getTag().equals("Ball")){
             ballCoillisionNumber.increment();
             if (ballCoillisionNumber.value() >= 4){
                 brickerGameManager.RemoveItemFromGame(this, Layer.DEFAULT);

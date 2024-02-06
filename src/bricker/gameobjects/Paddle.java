@@ -33,6 +33,7 @@ public class Paddle extends GameObject {
         this.inputListener = inputListener;
         this.windowDimensions = windowDimensions;
         this.WIDTH = dimensions.x();
+        this.setTag("Paddle");
     }
 
     /**

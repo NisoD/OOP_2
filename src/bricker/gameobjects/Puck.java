@@ -40,7 +40,7 @@ public class Puck extends Ball{
         this.brickPosition = brickPosition;
         this.brickerGameManager = brickerGameManager;
         this.windowDimensions = windowDimensions;
-
+        this.setTag("Puck");
         RandomDiagonal();
     }
 
@@ -58,6 +58,15 @@ public class Puck extends Ball{
         this.setCenter(new Vector2(brickPosition.x(), brickPosition.y() + DOWN_POSITION));
     }
 
+    /**
+     * checks if the ball is out of the window, if so- removes it
+     * @param deltaTime The time elapsed, in seconds, since the last frame. Can
+     *                  be used to determine a new position/velocity by multiplying
+     *                  this delta with the velocity/acceleration respectively
+     *                  and adding to the position/velocity:
+     *                  velocity += deltaTime*acceleration
+     *                  pos += deltaTime*velocity
+     */
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
