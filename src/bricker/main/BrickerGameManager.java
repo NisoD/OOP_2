@@ -1,6 +1,6 @@
 package bricker.main;
 
-import bricker.brick_strategies.CameraStrategy;
+import bricker.brick_strategies.CollisionStrategyFactory;
 import bricker.brick_strategies.IncrementLifeStrategy;
 import bricker.gameobjects.*;
 import danogl.GameManager;
@@ -380,6 +380,7 @@ public class BrickerGameManager extends GameManager {
                 (int) (windowDimensions.x() - (2*2*WALLS_WIDTH) - (BRICK_SPACES * colBrickNumber)) /
                         rowBrickNumber;
         brickCounter = new Counter(colBrickNumber*rowBrickNumber);
+        CollisionStrategyFactory factory = new CollisionStrategyFactory(this);
 
         for (int i = 0; i < rowBrickNumber; i++) {
             for (int j = 0; j < colBrickNumber; j++) {

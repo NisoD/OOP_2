@@ -4,12 +4,12 @@ import java.util.Arrays;
 import java.util.Random;
 import bricker.main.BrickerGameManager;
 
-public class StrategyFactory {
+public class CollisionStrategyFactory {
     private final BrickerGameManager brickerGameManager;
     private static final int MAX_STRATEGIES = 3;
     private final int DOUBLE_INDEX = 4;
 
-    StrategyFactory(BrickerGameManager brickerGameManager){
+    public CollisionStrategyFactory(BrickerGameManager brickerGameManager){
         this.brickerGameManager = brickerGameManager;
     }
     public CollisionStrategy makeStrategy(int numberOfStrategy){

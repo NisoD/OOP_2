@@ -6,13 +6,13 @@ import danogl.GameObject;
 public class DoubleBehaviourStrategy implements CollisionStrategy{
     private final BrickerGameManager brickerGameManager;
     private final CollisionStrategy[] collisionStrategies;
-    private final StrategyFactory strategyFactory;
+    private final CollisionStrategyFactory collisionStrategyFactory;
 
 
     DoubleBehaviourStrategy(BrickerGameManager brickerGameManager, CollisionStrategy[] strategies){
         this.collisionStrategies = strategies;
         this.brickerGameManager = brickerGameManager;
-        this.strategyFactory = new StrategyFactory(brickerGameManager);
+        this.collisionStrategyFactory = new CollisionStrategyFactory(brickerGameManager);
 
     }
     @Override
