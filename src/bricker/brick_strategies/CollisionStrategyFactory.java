@@ -27,10 +27,10 @@ public class CollisionStrategyFactory {
             case 3:
                 collisionStrategy = new CameraStrategy(brickerGameManager);
                 break;
-            case 4:
-                CollisionStrategy[] strategies = DoubleStrategyHandler();
-                collisionStrategy = new DoubleBehaviourStrategy(brickerGameManager, strategies);
-                break;
+//            case 4:
+//                CollisionStrategy[] strategies = DoubleStrategyHandler();
+//                collisionStrategy = new DoubleBehaviourStrategy(brickerGameManager, strategies);
+//                break;
             default:
                 collisionStrategy = new BasicCollisionStrategy(brickerGameManager);
                 break;

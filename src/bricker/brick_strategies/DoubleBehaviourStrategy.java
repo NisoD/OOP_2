@@ -17,12 +17,14 @@ public class DoubleBehaviourStrategy implements CollisionStrategy{
     }
     @Override
     public void onCollision(GameObject collider, GameObject other) {
-        for (CollisionStrategy strategy: collisionStrategies){
-            if (strategy != null){
-                strategy.onCollision(collider, other);
-                brickerGameManager.IncrementBrickCounter();
+        if (other.getTag().equals("Ball") || other.getTag().equals("Puck")){
+            for (CollisionStrategy strategy: collisionStrategies){
+                if (strategy != null){
+                    strategy.onCollision(collider, other);
+                    brickerGameManager.IncrementBrickCounter();
+                }
             }
+            brickerGameManager.DecrementBrickCounter();
         }
-        brickerGameManager.DecrementBrickCounter();
     }
 }

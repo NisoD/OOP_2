@@ -26,7 +26,7 @@ public class BasicCollisionStrategy implements CollisionStrategy{
      */
     @Override
     public void onCollision(GameObject collider ,GameObject other) {
-        if (other.getTag().equals("Ball")){
+        if (other.getTag().equals("Ball") || other.getTag().equals("Puck")){
             brickerGameManager.RemoveBrickFromGame(collider);
         }
     }

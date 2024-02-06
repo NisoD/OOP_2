@@ -23,7 +23,7 @@ public class CameraStrategy implements CollisionStrategy{
     }
     @Override
     public void onCollision(GameObject collider, GameObject other) {
-        if (other.getTag().equals("Ball")){
+        if (other.getTag().equals("Ball") || other.getTag().equals("Puck")){
             brickerGameManager.RemoveBrickFromGame(collider);
             if (!(other.getTag().equals("Puck")) && (brickerGameManager.camera() == null)){
                 timesOfBallCollision = ((Ball) other).getCollisionCounter();

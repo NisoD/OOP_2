@@ -36,7 +36,7 @@ public class PuckCollisionStrategy implements CollisionStrategy{
      */
     @Override
     public void onCollision(GameObject collider, GameObject other) {
-        if (other.getTag().equals("Ball")){
+        if (other.getTag().equals("Ball") || other.getTag().equals("Puck")){
             Vector2 brickPosition = collider.getCenter();
             float ballSize = brickerGameManager.getBallSize();
             Sound collisionSound = soundReader.readSound("assets/blop_cut_silenced.wav");

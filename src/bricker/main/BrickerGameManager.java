@@ -1,7 +1,6 @@
 package bricker.main;
 
 import bricker.brick_strategies.CollisionStrategyFactory;
-import bricker.brick_strategies.IncrementLifeStrategy;
 import bricker.gameobjects.*;
 import danogl.GameManager;
 import danogl.GameObject;
@@ -381,14 +380,16 @@ public class BrickerGameManager extends GameManager {
                         rowBrickNumber;
         brickCounter = new Counter(colBrickNumber*rowBrickNumber);
         CollisionStrategyFactory factory = new CollisionStrategyFactory(this);
+        Random random = new Random();
 
         for (int i = 0; i < rowBrickNumber; i++) {
             for (int j = 0; j < colBrickNumber; j++) {
+                int randomNum = random.nextInt(10);
                 Brick brick = new Brick(
                     new Vector2(2*WALLS_WIDTH + BRICK_SPACES + ((brickWidth + BRICK_SPACES)* i),
                                 2*WALLS_WIDTH + BRICK_SPACES + ((BRICK_HEIGHT + BRICK_SPACES)* j)),
                     new Vector2(brickWidth, BRICK_HEIGHT), brickImage,
-                    new IncrementLifeStrategy(this));
+                    factory.makeStrategy(randomNum));
                 gameObjects().addGameObject(brick);
             }
         }

@@ -20,7 +20,7 @@ public class AnotherPaddleStrategy implements CollisionStrategy {
     }
     @Override
     public void onCollision(GameObject collider, GameObject other) {
-        if (other.getTag().equals("Ball")){
+        if (other.getTag().equals("Ball") || other.getTag().equals("Puck")){
             if (!brickerGameManager.getIsThereSecondPaddle()){
                 Vector2 windowDimensions = brickerGameManager.getWindowDimensions();
                 brickerGameManager.setIsThereSecondPaddle(true);

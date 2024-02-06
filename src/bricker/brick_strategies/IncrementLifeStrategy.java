@@ -19,14 +19,16 @@ public class IncrementLifeStrategy implements CollisionStrategy{
     }
     @Override
     public void onCollision(GameObject collider, GameObject other) {
-        int lifeSize = brickerGameManager.getLifeCountSize();
-        Renderable img = imageReader.readImage("assets/heart.png",true);
+        if (other.getTag().equals("Ball") || other.getTag().equals("Puck")){
+            int lifeSize = brickerGameManager.getLifeCountSize();
+            Renderable img = imageReader.readImage("assets/heart.png",true);
 
-        Heart heart = new Heart(new Vector2(collider.getCenter()),new Vector2(lifeSize,lifeSize),img,
-                brickerGameManager);
-        heart.setVelocity(new Vector2(0,SPEED_OF_FALL));
-        brickerGameManager.AddGameObjectToGame(heart);
+            Heart heart = new Heart(new Vector2(collider.getCenter()),new Vector2(lifeSize,lifeSize),img,
+                    brickerGameManager);
+            heart.setVelocity(new Vector2(0,SPEED_OF_FALL));
+            brickerGameManager.AddGameObjectToGame(heart);
 
-        brickerGameManager.RemoveBrickFromGame(collider);
+            brickerGameManager.RemoveBrickFromGame(collider);
+        }
     }
 }
