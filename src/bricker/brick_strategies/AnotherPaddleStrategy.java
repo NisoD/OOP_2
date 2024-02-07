@@ -8,6 +8,10 @@ import danogl.gui.ImageReader;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
+/**
+ * the class that makes the second paddle,
+ * if there isn't already a paddle on the screen
+ */
 public class AnotherPaddleStrategy implements CollisionStrategy {
     private BrickerGameManager brickerGameManager;
 
@@ -18,6 +22,13 @@ public class AnotherPaddleStrategy implements CollisionStrategy {
     public AnotherPaddleStrategy(BrickerGameManager brickerGameManager) {
         this.brickerGameManager = brickerGameManager;
     }
+
+    /**
+     * on collision, checks if there is another paddle on screen,
+     * if there isn't makes one and adds it. removes the brick from the game
+     * @param collider the brick that the other object collided with
+     * @param other the other object that collided with the brick
+     */
     @Override
     public void onCollision(GameObject collider, GameObject other) {
         if (other.getTag().equals("Ball") || other.getTag().equals("Puck")){

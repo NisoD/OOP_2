@@ -12,6 +12,9 @@ import danogl.gui.SoundReader;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
+/**
+ * the class that's responsible for the puck balls strategy
+ */
 public class PuckCollisionStrategy implements CollisionStrategy{
     private BrickerGameManager brickerGameManager;
     private final ImageReader imageReader;

@@ -11,7 +11,7 @@ import danogl.util.Vector2;
 import java.util.Random;
 
 /**
- * class for the Puck ball
+ * class for the Puck ball, responsible for the behavior of the puck ball
  */
 public class Puck extends Ball{
     private static final float SPEED = 200;
@@ -45,7 +45,8 @@ public class Puck extends Ball{
     }
 
     /**
-     * calculates a random diagonal that is the velocity of the ball
+     * calculates a random diagonal that is the velocity of the ball,
+     * sets the center of the ball
      */
     private void RandomDiagonal(){
         float ballVelX,ballVelY;

@@ -4,14 +4,30 @@ import java.util.Arrays;
 import java.util.Random;
 import bricker.main.BrickerGameManager;
 
+/**
+ * the factory that makes all the strategies
+ */
 public class CollisionStrategyFactory {
     private final BrickerGameManager brickerGameManager;
     private static final int MAX_STRATEGIES = 3;
     private final int DOUBLE_INDEX = 4;
+    private final int RESTRICTION = 100;
+    private final int BOUND_OF_DOUBLE = 5;
+    private final int FIRST_NUMBER_OF_STARTEGIES = 2;
 
+    /**
+     * constructor for the factory
+     * @param brickerGameManager the game manager
+     */
     public CollisionStrategyFactory(BrickerGameManager brickerGameManager){
         this.brickerGameManager = brickerGameManager;
     }
+
+    /**
+     * makes the strategy according to the number that was given
+     * @param numberOfStrategy the number that was guven
+     * @return the strategy
+     */
     public CollisionStrategy makeStrategy(int numberOfStrategy){
         CollisionStrategy collisionStrategy;
         switch (numberOfStrategy){
@@ -38,6 +54,10 @@ public class CollisionStrategyFactory {
         return collisionStrategy;
     }
 
+    /**
+     * the method that makes the array of strategies for the double strategy
+     * @return the array of strategies
+     */
     private CollisionStrategy[] DoubleStrategyHandler(){
         CollisionStrategy[] strategies = new CollisionStrategy[MAX_STRATEGIES];
         int[] integerArray = fillArray();
@@ -50,26 +70,31 @@ public class CollisionStrategyFactory {
 
         return strategies;
     }
+
+    /**
+     * fills an array with integers, so that the handler can fill it with strategies accordingly
+     * @return the array of integers
+     */
     private int[] fillArray() {
         Random random = new Random();
         int[] lst = new int[MAX_STRATEGIES];
         Arrays.fill(lst, -1);
-        int numbersInList = 2;
-        int index = 2;
-        lst[0] = random.nextInt(5);
-        lst[1] = random.nextInt(5);
+        int numbersInList = FIRST_NUMBER_OF_STARTEGIES;
+        int index = FIRST_NUMBER_OF_STARTEGIES;
+        lst[0] = random.nextInt(BOUND_OF_DOUBLE);
+        lst[1] = random.nextInt(BOUND_OF_DOUBLE);
 
         int doubleIndex = isThereADoubleIndex(lst);
         int iterations = 0; // To limit maximum iterations
-        while (doubleIndex >= 0 && index <= MAX_STRATEGIES && iterations < MAX_STRATEGIES) {
+        while (doubleIndex >= 0 && index <= MAX_STRATEGIES && iterations < MAX_STRATEGIES + RESTRICTION) {
             if (numbersInList < MAX_STRATEGIES) {
                 numbersInList++;
             }
-            lst[doubleIndex] = random.nextInt(5);
+            lst[doubleIndex] = random.nextInt(BOUND_OF_DOUBLE);
             if (index == MAX_STRATEGIES) {
                 continue;
             }
-            lst[index] = random.nextInt(5);
+            lst[index] = random.nextInt(BOUND_OF_DOUBLE);
             index++;
             iterations++;
 
@@ -78,6 +103,11 @@ public class CollisionStrategyFactory {
         return lst;
     }
 
+    /**
+     * checks if there is an integer that represents the double strategy index
+     * @param lst the list to check
+     * @return the index if true, -1 if there isn't any
+     */
     private int isThereADoubleIndex(int[] lst){
         for (int i = 0; i < lst.length; i++) {
             if (lst[i] == DOUBLE_INDEX){

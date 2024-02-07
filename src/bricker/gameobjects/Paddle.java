@@ -14,7 +14,6 @@ public class Paddle extends GameObject {
     private static final float MOVEMENT_SPEED = 300;
     private final UserInputListener inputListener;
     private final Vector2 windowDimensions;
-
     private final float WIDTH;
 
     /**

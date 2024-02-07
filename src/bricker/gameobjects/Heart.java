@@ -7,6 +7,9 @@ import danogl.collisions.Layer;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
+/**
+ * the Heart class, responsible on the behavior of the Heart
+ */
 public class Heart extends GameObject {
     private final BrickerGameManager brickerGameManager;
 
@@ -32,7 +35,7 @@ public class Heart extends GameObject {
      */
     @Override
     public boolean shouldCollideWith(GameObject other) {
-        return !(other.getTag().equals("Ball") || other.getTag().equals("Puck"));
+        return other.getTag().equals("Paddle");
     }
 
     /**
@@ -46,9 +49,7 @@ public class Heart extends GameObject {
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
-        if(other.getTag().equals("SecondPaddle")){
-            brickerGameManager.RemoveItemFromGame(this, Layer.DEFAULT);
-        } else if (other.getTag().equals("Paddle")) {
+        if (other.getTag().equals("Paddle")) {
             brickerGameManager.RemoveItemFromGame(this, Layer.DEFAULT);
             brickerGameManager.IncrementHeartsLife();
         }

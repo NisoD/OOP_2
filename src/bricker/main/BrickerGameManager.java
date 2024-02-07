@@ -18,7 +18,7 @@ import java.awt.event.KeyEvent;
 import java.util.Random;
 
 /**
- * the game manager - it's responsible for the GameManager,
+ * the game manager - responsible for the GameManager,
  * the game window, the graphics are the scores
  */
 public class BrickerGameManager extends GameManager {
@@ -164,7 +164,6 @@ public class BrickerGameManager extends GameManager {
      * getter for the size of the paddle
      * @return  paddle sizes for another game components to use
      */
-
     public Vector2 getPaddleSize(){return new Vector2(PADDLE_WIDTH,PADDLE_HEIGHT);}
 
     /**
@@ -417,7 +416,6 @@ public class BrickerGameManager extends GameManager {
 
     /**
      * make the background of the game
-     *
      * @return the background
      */
     private GameObject MakeBackground(){

@@ -8,6 +8,9 @@ import danogl.gui.WindowController;
 import danogl.gui.rendering.Camera;
 import danogl.util.Vector2;
 
+/**
+ * the strategy that changes the main camera of the game, if it's not changed already
+ */
 public class CameraStrategy implements CollisionStrategy{
     private BrickerGameManager brickerGameManager;
     private final WindowController windowController;
@@ -21,6 +24,13 @@ public class CameraStrategy implements CollisionStrategy{
         this.brickerGameManager = brickerGameManager;
         this.windowController = brickerGameManager.getWindowController();
     }
+
+    /**
+     * on collision, checks if the collided was a regular ball and that the camera isn't
+     * changed already, if so, changes the camera, removes the brick from the game
+     * @param collider the brick that the other object collided with
+     * @param other the other object that collided with the brick
+     */
     @Override
     public void onCollision(GameObject collider, GameObject other) {
         if (other.getTag().equals("Ball") || other.getTag().equals("Puck")){

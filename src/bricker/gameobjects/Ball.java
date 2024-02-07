@@ -12,13 +12,7 @@ import danogl.util.Vector2;
  */
 public class Ball extends GameObject {
     private Sound collisionSound;
-
-    public int getCollisionCounter() {
-        return collisionCounter.value();
-    }
-
     private Counter collisionCounter;
-
 
     /**
      * Construct a new GameObject instance.
@@ -35,6 +29,15 @@ public class Ball extends GameObject {
         this.collisionCounter = new Counter(0);
         this.setTag("Ball");
     }
+
+    /**
+     * the getter for the collision counter
+     * @return the collision counter
+     */
+    public int getCollisionCounter() {
+        return collisionCounter.value();
+    }
+
     /**
      * responsible for what happens on collision - makes the ball bounce
      * @param other The GameObject with which a collision occurred.
