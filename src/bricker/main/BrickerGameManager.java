@@ -234,7 +234,7 @@ public class BrickerGameManager extends GameManager {
         super.update(deltaTime);
         float ballHeight = ball.getCenter().y();
 
-        if (camera() != null && ball.getCollisionCounter() == timesOfBallCollision +
+        if (camera() != null && ball.getCollisionCounter() >= timesOfBallCollision +
                 TIME_OF_BALL_COLLISION_CAMERA_MOVE){
             setCamera(null);
         }

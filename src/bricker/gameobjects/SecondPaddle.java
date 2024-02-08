@@ -39,9 +39,7 @@ public class SecondPaddle extends Paddle{
      * getter for number of balls that collided with the paddle
      * @return number of balls that collided with the paddle
      */
-    public int getBallCoillisionNumber() {
-        return ballCoillisionNumber.value();
-    }
+    public int getBallCoillisionNumber() { return ballCoillisionNumber.value(); }
 
     /**
      * is the collider was a ball, increments the number of ball collision

@@ -1,0 +1,6 @@
+cd C:\Users\inbar\Documents\OOP\Ex0\src\bricker
+
+
+jar cf ex2.jar README brick_strategies\AnotherPaddleStrategy.java brick_strategies\BasicCollisionStrategy.java brick_strategies\CameraStrategy.java brick_strategies\CollisionStrategy.java brick_strategies\CollisionStrategyFactory.java brick_strategies\DoubleBehaviourStrategy.java brick_strategies\IncrementLifeStrategy.java brick_strategies\PuckCollisionStrategy.java gameobjects\Ball.java gameobjects\Brick.java gameobjects\Heart.java gameobjects\Paddle.java gameobjects\Puck.java gameobjects\SecondPaddle.java main\BrickerGameManager.java
+ 
+

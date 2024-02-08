@@ -11,7 +11,7 @@ public class CollisionStrategyFactory {
     private final BrickerGameManager brickerGameManager;
     private static final int MAX_STRATEGIES = 3;
     private final int DOUBLE_INDEX = 4;
-    private final int RESTRICTION = 100;
+    private final int RESTRICTION = 10;
     private final int BOUND_OF_DOUBLE = 5;
     private final int FIRST_NUMBER_OF_STARTEGIES = 2;
 
@@ -86,12 +86,13 @@ public class CollisionStrategyFactory {
 
         int doubleIndex = isThereADoubleIndex(lst);
         int iterations = 0; // To limit maximum iterations
-        while (doubleIndex >= 0 && index <= MAX_STRATEGIES && iterations < MAX_STRATEGIES + RESTRICTION) {
+        while (doubleIndex >= 0 && index <= MAX_STRATEGIES && iterations < MAX_STRATEGIES * RESTRICTION) {
             if (numbersInList < MAX_STRATEGIES) {
                 numbersInList++;
             }
             lst[doubleIndex] = random.nextInt(BOUND_OF_DOUBLE);
             if (index == MAX_STRATEGIES) {
+                index++;
                 continue;
             }
             lst[index] = random.nextInt(BOUND_OF_DOUBLE);
