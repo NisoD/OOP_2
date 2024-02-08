@@ -14,7 +14,6 @@ import danogl.util.Vector2;
 public class CameraStrategy implements CollisionStrategy{
     private BrickerGameManager brickerGameManager;
     private final WindowController windowController;
-    private int timesOfBallCollision;
 
     /**
      * the constructor of the CameraStrategy
@@ -36,7 +35,6 @@ public class CameraStrategy implements CollisionStrategy{
         if (other.getTag().equals("Ball") || other.getTag().equals("Puck")){
             brickerGameManager.RemoveBrickFromGame(collider);
             if (!(other.getTag().equals("Puck")) && (brickerGameManager.camera() == null)){
-                timesOfBallCollision = ((Ball) other).getCollisionCounter();
                 brickerGameManager.setCamera(new Camera(other, Vector2.ZERO,
                         windowController.getWindowDimensions().mult(1.2f),
                         windowController.getWindowDimensions()));

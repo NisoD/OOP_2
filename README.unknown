@@ -1,0 +1,22 @@
+
+niso,inbarbahnof
+207447970,207009721
+
+1)	In order to implement the bricks we chose strategy number 2, in our opinion, removing bricks is a unique functionality of a gama manager. We do not want to give object in game an access to other objects, instead we give it access to specific functionalities of game manager to which they can send themselves to be added or removed. This way, we strengthen the encapsulation of our game. There are disadvantages to our strategy, i.e. the ability to remove objects is public and so is some functionality of our game.
+A significant disadvantage is the fact that we had to import the gamemanager in many of our game components and make a public function of removing and adding items.
+2)	We decided that  adding and removing a life is a critical part of the game.
+So it is implemented inside the game manager too, the functionality is divided into a number of functions:
+•	MakeHeartLife – in charge of graphical life representation
+•	MakeLifeCount – in charge of  the numerical life representation
+•	UpdateLifeGraphic –   updates the coloring according to lifes count
+•	LifeCounter – a class parameter to count the amount of lifes the user has
+•	Increment, Decrement functions which handle the logic behind incrementing and decrementing of a life.(UI and logic)
+
+3)	In order to implement all the behaviors requested in the task we created a class that would override the onCollision method. Each class has its own strategy and specific implementation based on the needs. Likewise, we created a 'factory' of strategies according to the requested strategies. The 'factory' creates a strategy with probability to get each one (half for regular strategy and 1/10 for each special one).
+Also, there is an interface for the equivalent strategy.
+4)	To implement the double strategy  we did so in the factory, the factory has a variable  called MAX_STRATEGIES which by changing it (currently set to 3) we change the amount of strategies a brick can acquire. In order to simplify the logic in each function we split the task to a few functions, the first one creates an integer array of numbers between 0-5 in maximal size of MAX_STRATEGIES , if the number equivalent to the double_strategy is received the two numbers are randomly selected.
+This list of integers is has a decipher to the relevant strategy and there is a function that makes from the integer list a strategy list.
+The constraint for max strategies is very simple , by changing the variable there can be more\less stacking of strategies per brick.
+5)	We added getters and setters with which we could extend the functionality of our game.
+
+

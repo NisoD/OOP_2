@@ -85,8 +85,8 @@ public class CollisionStrategyFactory {
         lst[1] = random.nextInt(BOUND_OF_DOUBLE);
 
         int doubleIndex = isThereADoubleIndex(lst);
-        int iterations = 0; // To limit maximum iterations
-        while (doubleIndex >= 0 && index <= MAX_STRATEGIES && iterations < MAX_STRATEGIES * RESTRICTION) {
+//        int iterations = 0; // To limit maximum iterations   && iterations < MAX_STRATEGIES * RESTRICTION
+        while (doubleIndex >= 0 && index <= MAX_STRATEGIES) {
             if (numbersInList < MAX_STRATEGIES) {
                 numbersInList++;
             }
@@ -97,7 +97,6 @@ public class CollisionStrategyFactory {
             }
             lst[index] = random.nextInt(BOUND_OF_DOUBLE);
             index++;
-            iterations++;
 
             doubleIndex = isThereADoubleIndex(lst);
         }
