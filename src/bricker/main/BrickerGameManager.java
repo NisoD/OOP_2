@@ -448,8 +448,15 @@ public class BrickerGameManager extends GameManager {
      * @param args command line arguments
      */
     public static void main(String[] args) {
-        BrickerGameManager gameManager = new BrickerGameManager("Bouncing Ball",
-                new Vector2(700, 500));
+        BrickerGameManager gameManager;
+        if (args.length == 2){
+            gameManager = new BrickerGameManager("Bouncing Ball",
+                    new Vector2(700, 500), Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+        }
+        else {
+            gameManager = new BrickerGameManager("Bouncing Ball",
+                    new Vector2(700, 500));
+        }
         gameManager.run();
     }
 }
