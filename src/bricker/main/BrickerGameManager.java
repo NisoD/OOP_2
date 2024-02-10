@@ -22,6 +22,8 @@ import java.util.Random;
  * the game window, the graphics are the scores
  */
 public class BrickerGameManager extends GameManager {
+    private static final int WINDOW_WIDTH = 700;
+    private static final int WINDOW_LENGTH = 500;
     private static final float BALL_SPEED = 200;
     private static final int WALLS_WIDTH = 10;
     private static final int BRICK_SPACES = 2;
@@ -178,9 +180,10 @@ public class BrickerGameManager extends GameManager {
      */
     @Override
     public void setCamera(Camera camera) {
-        super.setCamera(camera);
         if (ball != null)
             this.timesOfBallCollision = ball.getCollisionCounter();
+
+        super.setCamera(camera);
     }
 
     /**
@@ -234,7 +237,7 @@ public class BrickerGameManager extends GameManager {
         super.update(deltaTime);
         float ballHeight = ball.getCenter().y();
 
-        if (camera() != null && ball.getCollisionCounter() >= timesOfBallCollision +
+        if (camera() != null && ball.getCollisionCounter() > timesOfBallCollision +
                 TIME_OF_BALL_COLLISION_CAMERA_MOVE){
             setCamera(null);
         }
@@ -451,11 +454,12 @@ public class BrickerGameManager extends GameManager {
         BrickerGameManager gameManager;
         if (args.length == 2){
             gameManager = new BrickerGameManager("Bouncing Ball",
-                    new Vector2(700, 500), Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+                    new Vector2(WINDOW_WIDTH, WINDOW_LENGTH), Integer.parseInt(args[0]),
+                    Integer.parseInt(args[1]));
         }
         else {
             gameManager = new BrickerGameManager("Bouncing Ball",
-                    new Vector2(700, 500));
+                    new Vector2(WINDOW_WIDTH, WINDOW_LENGTH));
         }
         gameManager.run();
     }

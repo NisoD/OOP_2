@@ -33,12 +33,12 @@ public class CameraStrategy implements CollisionStrategy{
     @Override
     public void onCollision(GameObject collider, GameObject other) {
         if (other.getTag().equals("Ball") || other.getTag().equals("Puck")){
-            brickerGameManager.RemoveBrickFromGame(collider);
             if (!(other.getTag().equals("Puck")) && (brickerGameManager.camera() == null)){
                 brickerGameManager.setCamera(new Camera(other, Vector2.ZERO,
                         windowController.getWindowDimensions().mult(1.2f),
                         windowController.getWindowDimensions()));
             }
+            brickerGameManager.RemoveBrickFromGame(collider);
         }
     }
 }
